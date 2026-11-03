@@ -33,6 +33,6 @@ export async function setupServiceWorker() {
     await unregisterAppSW();
     return;
   }
-  const { registerSW } = await import("virtual:pwa-register");
+  const { registerSW } = await import(/* @vite-ignore */ "virtual:pwa-register");
   registerSW({ immediate: true });
 }
