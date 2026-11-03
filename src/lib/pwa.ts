@@ -3,7 +3,7 @@ function isRefusedContext(): boolean {
   if (!import.meta.env.PROD) return true;
   if (window.self !== window.top) return true;
   const host = window.location.hostname.toLowerCase();
-  const label = host.split(".")[0];
+  const label = host.split(".")[0] ?? "";
   const previewDomains = [".lovable.app", ".gpt-eng.com", ".gptengineer.run"];
   if (
     previewDomains.some((d) => host.endsWith(d)) &&
