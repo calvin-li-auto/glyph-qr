@@ -78,3 +78,15 @@
   100% { top: 8%; }
 }
 @utility animate-scanline { animation: scanline 2.4s ease-in-out infinite; }
+
+@utility btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius);
+  padding: 0.8rem 1rem;
+  font-weight: 500;
+  transition: transform 0.1s, opacity 0.2s;
+  &:active { transform: scale(0.97); }
+}
