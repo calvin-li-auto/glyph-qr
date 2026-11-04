@@ -84,11 +84,11 @@ function Results() {
         />
       </div>
 
-      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,20rem)_minmax(0,1fr)] items-start gap-2">
+      <div className="grid grid-cols-[4.5rem_minmax(0,20rem)_4.5rem] items-start justify-center gap-2">
         <Button
           variant="secondary"
           size="sm"
-          className="h-auto min-w-0 whitespace-normal py-2"
+          className="h-auto min-w-0 flex-col gap-1 whitespace-normal px-1 py-2 text-xs leading-tight"
           onClick={async () => {
             await navigator.clipboard.writeText(text);
             setCopied(true);
@@ -107,7 +107,7 @@ function Results() {
         <Button
           variant="secondary"
           size="sm"
-          className="h-auto min-w-0 whitespace-normal py-2"
+          className="h-auto min-w-0 flex-col gap-1 whitespace-normal px-1 py-2 text-xs leading-tight"
           onClick={() => void navigate({
             search: (prev) => ({ ...prev, content: text }),
             replace: true,
