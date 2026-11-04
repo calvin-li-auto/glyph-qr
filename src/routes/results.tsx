@@ -86,9 +86,9 @@ function Results() {
 
       <div className="grid w-full grid-cols-[5rem_minmax(0,1fr)_5rem] items-start gap-3 sm:grid-cols-[6rem_minmax(0,1fr)_6rem] sm:gap-4">
         <Button
-          variant="secondary"
+          variant="outline"
           size="sm"
-          className="my-2 h-24 w-full min-w-0 flex-col gap-2 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="my-2 h-24 w-full min-w-0 flex-col gap-2 rounded-none rounded-l-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={async () => {
             await navigator.clipboard.writeText(text);
             setCopied(true);
@@ -105,9 +105,9 @@ function Results() {
           )}
         </div>
         <Button
-          variant="secondary"
+          variant="outline"
           size="sm"
-          className="my-2 h-24 w-full min-w-0 flex-col gap-2 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="my-2 h-24 w-full min-w-0 flex-col gap-2 rounded-none rounded-r-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={() => void navigate({
             search: (prev) => ({ ...prev, content: text }),
             replace: true,
