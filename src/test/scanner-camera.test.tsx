@@ -1,4 +1,4 @@
-import { cleanup, render, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Route } from "@/routes/index";
 
@@ -28,6 +28,16 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe("Automatic camera scanning", () => {
+  it("restarts camera access with Scan after stopping automatic scanning", async () => {
+    getUserMedia.mockResolvedValue(stream);
+    const view = renderScanner();
+    fireEvent.click(await view.findByRole("button", { name: /^Stop$/ }));
+    expect(stopTrack).toHaveBeenCalledTimes(1);
+    fireEvent.click(view.getByRole("button", { name: /^Scan$/ }));
+    await waitFor(() => expect(getUserMedia).toHaveBeenCalledTimes(2));
+    await view.findByRole("button", { name: /^Stop$/ });
+  });
+
   it("requests the rear camera on opening the scanner without a button click", async () => {
     getUserMedia.mockResolvedValue(stream);
     const view = renderScanner();
