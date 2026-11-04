@@ -10,4 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Scanner and results use separate TanStack routes and a shared GlyphShell so both pages register offline support.
-- Transfer decoded QR text through router history state, not URL parameters, to keep scanned content out of URLs.
+- Transfer decoded QR text through router history state by default; results accept optional validated URL content with precedence over history state, and only an explicit user action publishes edited text into the URL, keeping scans private by default.

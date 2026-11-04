@@ -1,16 +1,19 @@
 import { createFileRoute, Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { ArrowLeft, Copy, ExternalLink } from "lucide-react";
+import { ArrowLeft, Copy, ExternalLink, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { GlyphShell } from "@/components/glyph-shell";
 import { isLink, normalizeLink } from "@/lib/qr-text";
+import { resolveResultContent, validateResultSearch } from "@/lib/result-content";
 
 declare module "@tanstack/react-router" {
   interface HistoryState { qrText?: string }
 }
 
 export const Route = createFileRoute("/results")({
+  validateSearch: validateResultSearch,
   head: () => ({ meta: [
     { title: "QR Results — Glyph" },
     { name: "description", content: "Read, copy, and edit your QR code text with Glyph, fully offline." },
@@ -23,7 +26,10 @@ export const Route = createFileRoute("/results")({
 });
 
 function Results() {
-  const initial = useLocation({ select: (location) => location.state.qrText ?? "" });
+  const { content } = Route.useSearch();
+  const scannedText = useLocation({ select: (location) => location.state.qrText });
+  const initial = resolveResultContent(content, scannedText);
+  const navigate = Route.useNavigate();
   const [text, setText] = useState(initial);
   const [img, setImg] = useState<string>("");
   const [copied, setCopied] = useState(false);
@@ -53,6 +59,24 @@ function Results() {
 
       <div className="rounded-2xl border bg-card p-4">
         <div className="mb-2 flex items-center justify-end gap-3">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  aria-label="Put content in URL"
+                  onClick={() => void navigate({
+                    search: (prev) => ({ ...prev, content: text }),
+                    replace: true,
+                  })}
+                >
+                  <Link2 className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Put content in URL</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <Button
             variant="secondary"
             size="sm"
