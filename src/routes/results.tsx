@@ -29,6 +29,10 @@ function Results() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    setText(initial);
+  }, [initial]);
+
+  useEffect(() => {
     if (!text) {
       setImg("");
       return;
