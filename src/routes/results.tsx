@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { ArrowLeft, Copy, ExternalLink, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { GlyphShell } from "@/components/glyph-shell";
 import { isLink, normalizeLink } from "@/lib/qr-text";
 import { resolveResultContent, validateResultSearch } from "@/lib/result-content";
@@ -58,29 +57,11 @@ function Results() {
       </Button>
 
       <div className="rounded-2xl border bg-card p-4">
-        <div className="mb-2 flex items-center justify-end gap-3">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  aria-label="Put content in URL"
-                  onClick={() => void navigate({
-                    search: (prev) => ({ ...prev, content: text }),
-                    replace: true,
-                  })}
-                >
-                  <Link2 className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Put content in URL</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <div className="mb-3 grid grid-cols-2 gap-2">
           <Button
             variant="secondary"
             size="sm"
-            className="w-28 shrink-0"
+            className="w-full min-w-0"
             onClick={async () => {
               await navigator.clipboard.writeText(text);
               setCopied(true);
@@ -88,6 +69,17 @@ function Results() {
             }}
           >
             <Copy className="h-4 w-4" /> {copied ? "Copied" : "Copy text"}
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="w-full min-w-0"
+            onClick={() => void navigate({
+              search: (prev) => ({ ...prev, content: text }),
+              replace: true,
+            })}
+          >
+            <Link2 className="h-4 w-4" /> Move text to URL
           </Button>
         </div>
         {link ? (
