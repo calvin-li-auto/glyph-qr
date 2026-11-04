@@ -13,3 +13,6 @@ that sounds mostly good. But how about moving the "scan another" button to the h
 remove the rounded edges for the qr code.
 
 make sure the buttons are top-aligned with the top of the qr code box
+
+
+the text box border changes on click. do the same with the buttons
