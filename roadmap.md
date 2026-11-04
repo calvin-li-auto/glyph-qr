@@ -1,3 +1,3 @@
-- [ ] Remove the two visible result labels while retaining an accessible editor name.
-- [ ] Open scan results and QR creation on a separate offline-capable page.
-- [ ] Verify image scanning, editing, copying, and returning to the scanner.
+- [x] Remove the two visible result labels while retaining an accessible editor name.
+- [x] Open scan results and QR creation on a separate offline-capable page.
+- [x] Verify image scanning, editing, copying, and returning to the scanner.
