@@ -1,11 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
-import QRCode from "qrcode";
-import { Camera, ImageUp, ArrowLeft, Copy, ExternalLink, CameraOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { setupServiceWorker } from "@/lib/pwa";
-import { isLink, normalizeLink } from "@/lib/qr-text";
+import { Camera, ImageUp, CameraOff } from "lucide-react";
+import { GlyphShell } from "@/components/glyph-shell";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,28 +26,11 @@ function decodeImageData(img: ImageData) {
 }
 
 function Index() {
-  const [result, setResult] = useState<string | null>(null);
-
-  useEffect(() => {
-    void setupServiceWorker();
-  }, []);
-
-  return (
-    <main className="mx-auto flex min-h-screen max-w-xl flex-col px-5 py-6">
-      <header className="mb-6 flex items-center gap-3">
-        <img src="/favicon.png" alt="" width={32} height={32} className="rounded-md" />
-        <h1 className="text-xl font-bold tracking-tight">Glyph</h1>
-        <span className="ml-auto rounded-full border px-2.5 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-          works offline
-        </span>
-      </header>
-      {result === null ? (
-        <Scanner onResult={setResult} />
-      ) : (
-        <ResultView initial={result} onBack={() => setResult(null)} />
-      )}
-    </main>
-  );
+  const navigate = useNavigate();
+  const onResult = useCallback((text: string) => {
+    void navigate({ to: "/results", state: { qrText: text } });
+  }, [navigate]);
+  return <GlyphShell><Scanner onResult={onResult} /></GlyphShell>;
 }
 
 function Scanner({ onResult }: { onResult: (t: string) => void }) {
@@ -185,87 +165,3 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
   );
 }
 
-function ResultView({ initial, onBack }: { initial: string; onBack: () => void }) {
-  const [text, setText] = useState(initial);
-  const [img, setImg] = useState<string>("");
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (!text) {
-      setImg("");
-      return;
-    }
-    QRCode.toDataURL(text, { margin: 2, width: 640, errorCorrectionLevel: "M" })
-      .then(setImg)
-      .catch(() => setImg(""));
-  }, [text]);
-
-  const link = isLink(text) ? normalizeLink(text) : null;
-
-  return (
-    <section className="flex flex-col gap-5">
-      <button
-        onClick={onBack}
-        className="flex items-center gap-2 self-start text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" /> Scan another
-      </button>
-
-      <div className="rounded-2xl border bg-card p-4">
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Content</p>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="w-28 shrink-0"
-            onClick={async () => {
-              await navigator.clipboard.writeText(text);
-              setCopied(true);
-              setTimeout(() => setCopied(false), 1500);
-            }}
-          >
-            <Copy className="h-4 w-4" /> {copied ? "Copied" : "Copy text"}
-          </Button>
-        </div>
-        {link ? (
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-start gap-2 break-all font-mono text-primary underline underline-offset-4"
-          >
-            {text} <ExternalLink className="mt-1 h-4 w-4 shrink-0" />
-          </a>
-        ) : (
-          <p className="whitespace-pre-wrap break-all font-mono">
-            {text || <span className="text-muted-foreground">(empty)</span>}
-          </p>
-        )}
-      </div>
-
-      <div>
-        <label
-          htmlFor="qr-text"
-          className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-muted-foreground"
-        >
-          Edit to make a new code
-        </label>
-        <textarea
-          id="qr-text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          rows={4}
-          className="w-full rounded-xl border bg-input/40 p-3 font-mono text-sm outline-none focus:ring-2 focus:ring-ring"
-        />
-      </div>
-
-      <div className="mx-auto w-full max-w-xs rounded-2xl bg-paper p-3 shadow-glow">
-        {img ? (
-          <img src={img} alt="QR code" className="aspect-square w-full" />
-        ) : (
-          <div className="flex aspect-square items-center justify-center text-sm text-ink/50">Type text below</div>
-        )}
-      </div>
-    </section>
-  );
-}

@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Scanner and results use separate TanStack routes and a shared GlyphShell so both pages register offline support.
+- Transfer decoded QR text through router history state, not URL parameters, to keep scanned content out of URLs.
