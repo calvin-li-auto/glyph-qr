@@ -50,12 +50,14 @@ function Results() {
   const link = isLink(text) ? normalizeLink(text) : null;
 
   return (
-    <GlyphShell>
+    <GlyphShell
+      headerStart={
+        <Button asChild variant="ghost" size="sm" className="px-0 text-muted-foreground">
+          <Link to="/"><ArrowLeft className="h-4 w-4" /> Scan another</Link>
+        </Button>
+      }
+    >
     <section className="flex flex-col gap-5">
-      <Button asChild variant="ghost" className="self-start px-0 text-muted-foreground">
-        <Link to="/"><ArrowLeft className="h-4 w-4" /> Scan another</Link>
-      </Button>
-
       <div className="rounded-2xl border bg-card p-4">
         {link ? (
           <a
@@ -73,22 +75,20 @@ function Results() {
         )}
       </div>
 
-      <div>
-        <textarea
-          id="qr-text"
-          aria-label="QR code text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          rows={4}
-          className="w-full rounded-xl border bg-input/40 p-3 font-mono text-sm outline-none focus:ring-2 focus:ring-ring"
-        />
-      </div>
+      <textarea
+        id="qr-text"
+        aria-label="QR code text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        rows={4}
+        className="w-full rounded-xl border bg-input/40 p-3 font-mono text-sm outline-none focus:ring-2 focus:ring-ring"
+      />
 
-      <div className="grid w-full grid-cols-[5rem_minmax(0,1fr)_5rem] items-start gap-3 sm:grid-cols-[6rem_minmax(0,1fr)_6rem] sm:gap-4">
+      <div id="qr_code_container" className="flex w-full items-start gap-3 sm:gap-4 [&>button]:w-20 [&>button]:shrink-0 sm:[&>button]:w-24">
         <Button
           variant="outline"
           size="sm"
-          className="my-2 h-24 w-full min-w-0 flex-col gap-2 rounded-none rounded-l-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="my-2 h-24 min-w-0 flex-col gap-2 rounded-none rounded-l-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={async () => {
             await navigator.clipboard.writeText(text);
             setCopied(true);
@@ -97,7 +97,7 @@ function Results() {
         >
           <Copy className="h-4 w-4 shrink-0" /> <span className="my-2">{copied ? "Copied" : "Copy text"}</span>
         </Button>
-        <div className="w-full rounded-2xl bg-paper p-3 shadow-glow">
+        <div className="min-w-0 flex-1 rounded-2xl bg-paper p-3 shadow-glow">
           {img ? (
             <img src={img} alt="QR code" className="aspect-square w-full" />
           ) : (
@@ -107,7 +107,7 @@ function Results() {
         <Button
           variant="outline"
           size="sm"
-          className="my-2 h-24 w-full min-w-0 flex-col gap-2 rounded-none rounded-r-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="my-2 h-24 min-w-0 flex-col gap-2 rounded-none rounded-r-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={() => void navigate({
             search: (prev) => ({ ...prev, content: text }),
             replace: true,

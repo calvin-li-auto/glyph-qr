@@ -3,3 +3,4 @@
 - [x] Verify image scanning, editing, copying, and returning to the scanner.
 - [x] Accept optional URL content before scanned history state and provide an explicit URL-population button.
 - [x] Verify Unicode link round-trips, reloads, editing, and private navigation (history fallback covered by tests).
+- [x] Move "Scan another" into the header and center the Glyph logo/title.
