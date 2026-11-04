@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
 import { Camera, ImageUp, CameraOff } from "lucide-react";
 import { GlyphShell } from "@/components/glyph-shell";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,17 +39,17 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number>(0);
+  const cameraRequestRef = useRef(0);
   const [active, setActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const stop = useCallback(() => {
+    cameraRequestRef.current += 1;
     cancelAnimationFrame(rafRef.current);
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     setActive(false);
   }, []);
-
-  useEffect(() => stop, [stop]);
 
   const tick = useCallback(() => {
     const video = videoRef.current;
@@ -57,7 +58,8 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
       const scale = Math.min(1, 720 / Math.max(video.videoWidth, video.videoHeight));
       canvas.width = Math.round(video.videoWidth * scale);
       canvas.height = Math.round(video.videoHeight * scale);
-      const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) return;
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       const code = decodeImageData(ctx.getImageData(0, 0, canvas.width, canvas.height));
       if (code && code.data) {
@@ -70,23 +72,36 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
     rafRef.current = requestAnimationFrame(tick);
   }, [onResult, stop]);
 
-  const start = async () => {
+  const start = useCallback(async () => {
+    const request = ++cameraRequestRef.current;
     setError(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: "environment" } },
         audio: false,
       });
+      const video = videoRef.current;
+      if (request !== cameraRequestRef.current || !video) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
       streamRef.current = stream;
-      const video = videoRef.current!;
       video.srcObject = stream;
       await video.play();
+      if (request !== cameraRequestRef.current) return;
       setActive(true);
       rafRef.current = requestAnimationFrame(tick);
     } catch {
+      if (request !== cameraRequestRef.current) return;
+      stop();
       setError("Couldn't open the camera. Check camera permission, or scan a saved image instead.");
     }
-  };
+  }, [stop, tick]);
+
+  useEffect(() => {
+    void start();
+    return stop;
+  }, [start, stop]);
 
   const onFile = async (file: File) => {
     setError(null);
@@ -96,8 +111,14 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
       const scale = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
       canvas.width = Math.round(bmp.width * scale);
       canvas.height = Math.round(bmp.height * scale);
-      const ctx = canvas.getContext("2d")!;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        bmp.close();
+        setError("Couldn't read that image file.");
+        return;
+      }
       ctx.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+      bmp.close();
       const code = decodeImageData(ctx.getImageData(0, 0, canvas.width, canvas.height));
       if (code?.data) {
         stop();
@@ -123,7 +144,9 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
           </>
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-muted-foreground">
-            <Camera className="h-10 w-10" />
+            <Button variant="ghost" size="icon" aria-label="Open camera" onClick={() => void start()} className="size-16 [&_svg]:size-10">
+              <Camera />
+            </Button>
             <p className="text-sm">Camera is off</p>
           </div>
         )}
@@ -131,15 +154,11 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
 
       {error && <p className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">{error}</p>}
 
-      <div className="grid grid-cols-2 gap-3">
-        {active ? (
-          <button onClick={stop} className="btn-base bg-secondary text-secondary-foreground">
+      <div className={`grid gap-3 ${active ? "grid-cols-2" : "grid-cols-1"}`}>
+        {active && (
+          <Button onClick={stop} variant="secondary" className="btn-base">
             <CameraOff className="h-4 w-4" /> Stop
-          </button>
-        ) : (
-          <button onClick={start} className="btn-base bg-primary text-primary-foreground">
-            <Camera className="h-4 w-4" /> Scan
-          </button>
+          </Button>
         )}
         <label className="btn-base cursor-pointer bg-secondary text-secondary-foreground">
           <ImageUp className="h-4 w-4" /> From image
@@ -155,12 +174,13 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
           />
         </label>
       </div>
-      <button
+      <Button
+        variant="link"
         onClick={() => onResult("")}
         className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
       >
         Or create a new QR code
-      </button>
+      </Button>
     </section>
   );
 }
