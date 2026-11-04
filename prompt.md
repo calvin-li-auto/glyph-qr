@@ -16,3 +16,6 @@ make sure the buttons are top-aligned with the top of the qr code box
 
 
 the text box border changes on click. do the same with the buttons
+
+
+remove the "Scan another" text, an arrow is enough if it is slightly larger

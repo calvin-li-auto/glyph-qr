@@ -52,8 +52,8 @@ function Results() {
   return (
     <GlyphShell
       headerStart={
-        <Button asChild variant="ghost" size="sm" className="px-0 text-muted-foreground">
-          <Link to="/"><ArrowLeft className="h-4 w-4" /> Scan another</Link>
+        <Button asChild variant="ghost" size="icon" className="text-muted-foreground [&_svg]:size-6">
+          <Link to="/" aria-label="Scan another"><ArrowLeft className="h-6 w-6" /></Link>
         </Button>
       }
     >
