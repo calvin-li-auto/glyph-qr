@@ -50,12 +50,14 @@ function Results() {
   const link = isLink(text) ? normalizeLink(text) : null;
 
   return (
-    <GlyphShell>
+    <GlyphShell
+      headerStart={
+        <Button asChild variant="ghost" size="sm" className="px-0 text-muted-foreground">
+          <Link to="/"><ArrowLeft className="h-4 w-4" /> Scan another</Link>
+        </Button>
+      }
+    >
     <section className="flex flex-col gap-5">
-      <Button asChild variant="ghost" className="self-start px-0 text-muted-foreground">
-        <Link to="/"><ArrowLeft className="h-4 w-4" /> Scan another</Link>
-      </Button>
-
       <div className="rounded-2xl border bg-card p-4">
         {link ? (
           <a
@@ -73,18 +75,16 @@ function Results() {
         )}
       </div>
 
-      <div>
-        <textarea
-          id="qr-text"
-          aria-label="QR code text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          rows={4}
-          className="w-full rounded-xl border bg-input/40 p-3 font-mono text-sm outline-none focus:ring-2 focus:ring-ring"
-        />
-      </div>
+      <textarea
+        id="qr-text"
+        aria-label="QR code text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        rows={4}
+        className="w-full rounded-xl border bg-input/40 p-3 font-mono text-sm outline-none focus:ring-2 focus:ring-ring"
+      />
 
-      <div className="grid w-full grid-cols-[5rem_minmax(0,1fr)_5rem] items-start gap-3 sm:grid-cols-[6rem_minmax(0,1fr)_6rem] sm:gap-4">
+      <div id="qr_code_container" className="flex w-full items-start gap-3 sm:gap-4 [&>button]:w-20 [&>button]:shrink-0 sm:[&>button]:w-24">
         <Button
           variant="outline"
           size="sm"
