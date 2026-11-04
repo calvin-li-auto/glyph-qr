@@ -56,31 +56,6 @@ function Results() {
         <Link to="/"><ArrowLeft className="h-4 w-4" /> Scan another</Link>
       </Button>
 
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="w-full min-w-0"
-            onClick={async () => {
-              await navigator.clipboard.writeText(text);
-              setCopied(true);
-              setTimeout(() => setCopied(false), 1500);
-            }}
-          >
-            <Copy className="h-4 w-4" /> {copied ? "Copied" : "Copy text"}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="w-full min-w-0"
-            onClick={() => void navigate({
-              search: (prev) => ({ ...prev, content: text }),
-              replace: true,
-            })}
-          >
-            <Link2 className="h-4 w-4" /> Move text to URL
-          </Button>
-        </div>
       <div className="rounded-2xl border bg-card p-4">
         {link ? (
           <a
@@ -109,12 +84,37 @@ function Results() {
         />
       </div>
 
-      <div className="mx-auto w-full max-w-xs rounded-2xl bg-paper p-3 shadow-glow">
-        {img ? (
-          <img src={img} alt="QR code" className="aspect-square w-full" />
-        ) : (
-          <div className="flex aspect-square items-center justify-center text-sm text-ink/50">Type text below</div>
-        )}
+      <div className="grid grid-cols-[4.5rem_minmax(0,20rem)_4.5rem] items-start justify-center gap-2">
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-auto min-w-0 flex-col gap-1 whitespace-normal px-1 py-2 text-xs leading-tight"
+          onClick={async () => {
+            await navigator.clipboard.writeText(text);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+          }}
+        >
+          <Copy className="h-4 w-4 shrink-0" /> {copied ? "Copied" : "Copy text"}
+        </Button>
+        <div className="w-full rounded-2xl bg-paper p-3 shadow-glow">
+          {img ? (
+            <img src={img} alt="QR code" className="aspect-square w-full" />
+          ) : (
+            <div className="flex aspect-square items-center justify-center text-sm text-ink/50">Type text below</div>
+          )}
+        </div>
+        <Button
+          variant="secondary"
+          size="sm"
+          className="h-auto min-w-0 flex-col gap-1 whitespace-normal px-1 py-2 text-xs leading-tight"
+          onClick={() => void navigate({
+            search: (prev) => ({ ...prev, content: text }),
+            replace: true,
+          })}
+        >
+          <Link2 className="h-4 w-4 shrink-0" /> Move text to URL
+        </Button>
       </div>
     </section>
     </GlyphShell>
