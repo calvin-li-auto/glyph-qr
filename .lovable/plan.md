@@ -26,8 +26,9 @@ It already matches your outline in order and nesting. The differences:
 
 - Remove the extra wrapper around the text box so it's a direct child of the outer container.
 - Give the QR row `id="qr_code_container"` and make it a horizontal flex row: fixed-width buttons on each side, QR card growing in the middle. Current button heights, spacing, outer-edge rounding, fills and borders stay unchanged.
-- Keep the "Scan another" link above everything (tell me if you want it removed).
-- Add this prompt to prompt.md.
+- Move "Scan another" out of the page and into the shared header, on the left. It shows only on the results page.
+- Center the Glyph logo and title in the header on both pages. The "works offline" badge stays on the right.
+- Add these prompts to prompt.md and add the header task to roadmap.md.
 
 ## Check
 
