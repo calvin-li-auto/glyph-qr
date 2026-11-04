@@ -144,9 +144,7 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
           </>
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-muted-foreground">
-            <Button variant="ghost" size="icon" aria-label="Open camera" onClick={() => void start()} className="size-16 [&_svg]:size-10">
-              <Camera />
-            </Button>
+            <Camera className="size-10" />
             <p className="text-sm">Camera is off</p>
           </div>
         )}
@@ -154,10 +152,14 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
 
       {error && <p className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">{error}</p>}
 
-      <div className={`grid gap-3 ${active ? "grid-cols-2" : "grid-cols-1"}`}>
-        {active && (
+      <div className="grid grid-cols-2 gap-3">
+        {active ? (
           <Button onClick={stop} variant="secondary" className="h-12 w-full">
             <CameraOff className="h-4 w-4" /> Stop
+          </Button>
+        ) : (
+          <Button onClick={() => void start()} className="h-12 w-full">
+            <Camera className="h-4 w-4" /> Scan
           </Button>
         )}
         <Button asChild variant="secondary" className="h-12 w-full cursor-pointer">
