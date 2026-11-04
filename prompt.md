@@ -8,3 +8,8 @@ make the buttons only have curves in the outer edges. Also make them the same fi
 I want to check the css/layout of the results page (content box, text box, qr_code_container with copy button, qr img, text-to-url button)
 
 that sounds mostly good. But how about moving the "scan another" button to the header? move Glyph title and logo to center
+
+
+remove the rounded edges for the qr code.
+
+make sure the buttons are top-aligned with the top of the qr code box
