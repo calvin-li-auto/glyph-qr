@@ -156,11 +156,12 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
 
       <div className={`grid gap-3 ${active ? "grid-cols-2" : "grid-cols-1"}`}>
         {active && (
-          <Button onClick={stop} variant="secondary" className="btn-base">
+          <Button onClick={stop} variant="secondary" className="h-12 w-full">
             <CameraOff className="h-4 w-4" /> Stop
           </Button>
         )}
-        <label className="btn-base cursor-pointer bg-secondary text-secondary-foreground">
+        <Button asChild variant="secondary" className="h-12 w-full cursor-pointer">
+        <label>
           <ImageUp className="h-4 w-4" /> From image
           <input
             type="file"
@@ -173,6 +174,7 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
             }}
           />
         </label>
+        </Button>
       </div>
       <Button
         variant="link"

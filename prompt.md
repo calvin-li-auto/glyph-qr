@@ -21,3 +21,5 @@ the text box border changes on click. do the same with the buttons
 remove the "Scan another" text, an arrow is enough if it is slightly larger
 
 don't really need a dedicated scan button
+
+the stop and "from image" buttons should be the same size
