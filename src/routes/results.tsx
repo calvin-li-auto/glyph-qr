@@ -88,7 +88,7 @@ function Results() {
         <Button
           variant="outline"
           size="sm"
-          className="h-24 min-w-0 flex-col gap-2 rounded-none rounded-l-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="h-24 min-w-0 outline-none focus:ring-2 focus:ring-ring flex-col gap-2 rounded-none rounded-l-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={async () => {
             await navigator.clipboard.writeText(text);
             setCopied(true);
@@ -107,7 +107,7 @@ function Results() {
         <Button
           variant="outline"
           size="sm"
-          className="h-24 min-w-0 flex-col gap-2 rounded-none rounded-r-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="h-24 min-w-0 outline-none focus:ring-2 focus:ring-ring flex-col gap-2 rounded-none rounded-r-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={() => void navigate({
             search: (prev) => ({ ...prev, content: text }),
             replace: true,
