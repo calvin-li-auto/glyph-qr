@@ -84,18 +84,18 @@ function Results() {
         />
       </div>
 
-      <div className="grid grid-cols-[4.5rem_minmax(0,20rem)_4.5rem] items-start justify-center gap-2">
+      <div className="grid w-full grid-cols-[5rem_minmax(0,1fr)_5rem] items-start gap-3 sm:grid-cols-[6rem_minmax(0,1fr)_6rem] sm:gap-4">
         <Button
           variant="secondary"
           size="sm"
-          className="h-auto min-w-0 flex-col gap-1 whitespace-normal px-1 py-2 text-xs leading-tight"
+          className="my-2 h-24 w-full min-w-0 flex-col gap-2 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={async () => {
             await navigator.clipboard.writeText(text);
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
           }}
         >
-          <Copy className="h-4 w-4 shrink-0" /> {copied ? "Copied" : "Copy text"}
+          <Copy className="h-4 w-4 shrink-0" /> <span className="my-2">{copied ? "Copied" : "Copy text"}</span>
         </Button>
         <div className="w-full rounded-2xl bg-paper p-3 shadow-glow">
           {img ? (
@@ -107,7 +107,7 @@ function Results() {
         <Button
           variant="secondary"
           size="sm"
-          className="h-auto min-w-0 flex-col gap-1 whitespace-normal px-1 py-2 text-xs leading-tight"
+          className="my-2 h-24 w-full min-w-0 flex-col gap-2 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={() => void navigate({
             search: (prev) => ({ ...prev, content: text }),
             replace: true,
