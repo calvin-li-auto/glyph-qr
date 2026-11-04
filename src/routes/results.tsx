@@ -88,7 +88,7 @@ function Results() {
         <Button
           variant="outline"
           size="sm"
-          className="my-2 h-24 w-full min-w-0 flex-col gap-2 rounded-none rounded-l-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="my-2 h-24 min-w-0 flex-col gap-2 rounded-none rounded-l-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={async () => {
             await navigator.clipboard.writeText(text);
             setCopied(true);
@@ -97,7 +97,7 @@ function Results() {
         >
           <Copy className="h-4 w-4 shrink-0" /> <span className="my-2">{copied ? "Copied" : "Copy text"}</span>
         </Button>
-        <div className="w-full rounded-2xl bg-paper p-3 shadow-glow">
+        <div className="min-w-0 flex-1 rounded-2xl bg-paper p-3 shadow-glow">
           {img ? (
             <img src={img} alt="QR code" className="aspect-square w-full" />
           ) : (
@@ -107,7 +107,7 @@ function Results() {
         <Button
           variant="outline"
           size="sm"
-          className="my-2 h-24 w-full min-w-0 flex-col gap-2 rounded-none rounded-r-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
+          className="my-2 h-24 min-w-0 flex-col gap-2 rounded-none rounded-r-xl border-input bg-input/40 whitespace-normal px-2 py-3 text-xs leading-tight sm:px-3 sm:text-sm"
           onClick={() => void navigate({
             search: (prev) => ({ ...prev, content: text }),
             replace: true,
