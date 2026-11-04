@@ -13,4 +13,4 @@
 
 - Scanner and results use separate TanStack routes and a shared GlyphShell so both pages register offline support.
 - Transfer decoded QR text through router history state by default; results accept optional validated URL content with precedence over history state, and only an explicit user action publishes edited text into the URL, keeping scans private by default.
-- Write prompts into the prompt.md file. Just use whatever I typed in, with a blank line separating prompts. Clear the file after every git commit
+- Write prompts into the prompt.md file. Just use whatever I typed in, with a blank line separating prompts. Clear the prompt.md file contents after every git commit
