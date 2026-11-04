@@ -10,7 +10,10 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Glyph — Offline QR Scanner & Maker" },
-      { name: "description", content: "Scan QR codes with your camera or a photo, and make new ones — works fully offline." },
+      {
+        name: "description",
+        content: "Scan QR codes with your camera or a photo, and make new ones — works fully offline.",
+      },
       { property: "og:title", content: "Glyph — Offline QR Scanner & Maker" },
       { property: "og:description", content: "Scan, read, and create QR codes with zero reception." },
     ],
@@ -143,9 +146,7 @@ function Scanner({ onResult }: { onResult: (t: string) => void }) {
         )}
       </div>
 
-      {error && (
-        <p className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">{error}</p>
-      )}
+      {error && <p className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm">{error}</p>}
 
       <div className="grid grid-cols-2 gap-3">
         {active ? (
@@ -200,31 +201,36 @@ function ResultView({ initial, onBack }: { initial: string; onBack: () => void }
 
   return (
     <section className="flex flex-col gap-5">
-      <button onClick={onBack} className="flex items-center gap-2 self-start text-sm text-muted-foreground hover:text-foreground">
+      <button
+        onClick={onBack}
+        className="flex items-center gap-2 self-start text-sm text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeft className="h-4 w-4" /> Scan another
       </button>
-
-      <div className="mx-auto w-full max-w-xs rounded-2xl bg-paper p-3 shadow-glow">
-        {img ? (
-          <img src={img} alt="QR code" className="aspect-square w-full" />
-        ) : (
-          <div className="flex aspect-square items-center justify-center text-sm text-ink/50">Type text below</div>
-        )}
-      </div>
 
       <div className="rounded-2xl border bg-card p-4">
         <p className="mb-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Content</p>
         {link ? (
-          <a href={link} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 break-all font-mono text-primary underline underline-offset-4">
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-start gap-2 break-all font-mono text-primary underline underline-offset-4"
+          >
             {text} <ExternalLink className="mt-1 h-4 w-4 shrink-0" />
           </a>
         ) : (
-          <p className="whitespace-pre-wrap break-all font-mono">{text || <span className="text-muted-foreground">(empty)</span>}</p>
+          <p className="whitespace-pre-wrap break-all font-mono">
+            {text || <span className="text-muted-foreground">(empty)</span>}
+          </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="qr-text" className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+        <label
+          htmlFor="qr-text"
+          className="mb-2 block font-mono text-[11px] uppercase tracking-wider text-muted-foreground"
+        >
           Edit to make a new code
         </label>
         <textarea
@@ -255,6 +261,14 @@ function ResultView({ initial, onBack }: { initial: string; onBack: () => void }
         >
           <Download className="h-4 w-4" /> Save image
         </a>
+      </div>
+
+      <div className="mx-auto w-full max-w-xs rounded-2xl bg-paper p-3 shadow-glow">
+        {img ? (
+          <img src={img} alt="QR code" className="aspect-square w-full" />
+        ) : (
+          <div className="flex aspect-square items-center justify-center text-sm text-ink/50">Type text below</div>
+        )}
       </div>
     </section>
   );
