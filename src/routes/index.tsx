@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import jsQR from "jsqr";
 import QRCode from "qrcode";
-import { Camera, ImageUp, ArrowLeft, Download, Copy, ExternalLink, CameraOff } from "lucide-react";
+import { Camera, ImageUp, ArrowLeft, Copy, ExternalLink, CameraOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { setupServiceWorker } from "@/lib/pwa";
 import { isLink, normalizeLink } from "@/lib/qr-text";
 
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:title", content: "Glyph — Offline QR Scanner & Maker" },
       { property: "og:description", content: "Scan, read, and create QR codes with zero reception." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Index,
@@ -209,7 +212,21 @@ function ResultView({ initial, onBack }: { initial: string; onBack: () => void }
       </button>
 
       <div className="rounded-2xl border bg-card p-4">
-        <p className="mb-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Content</p>
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Content</p>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="w-28 shrink-0"
+            onClick={async () => {
+              await navigator.clipboard.writeText(text);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
+            }}
+          >
+            <Copy className="h-4 w-4" /> {copied ? "Copied" : "Copy text"}
+          </Button>
+        </div>
         {link ? (
           <a
             href={link}
@@ -240,27 +257,6 @@ function ResultView({ initial, onBack }: { initial: string; onBack: () => void }
           rows={4}
           className="w-full rounded-xl border bg-input/40 p-3 font-mono text-sm outline-none focus:ring-2 focus:ring-ring"
         />
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <button
-          onClick={async () => {
-            await navigator.clipboard.writeText(text);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
-          }}
-          className="btn-base bg-secondary text-secondary-foreground"
-        >
-          <Copy className="h-4 w-4" /> {copied ? "Copied" : "Copy text"}
-        </button>
-        <a
-          href={img || undefined}
-          download="qr-code.png"
-          aria-disabled={!img}
-          className="btn-base bg-primary text-primary-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"
-        >
-          <Download className="h-4 w-4" /> Save image
-        </a>
       </div>
 
       <div className="mx-auto w-full max-w-xs rounded-2xl bg-paper p-3 shadow-glow">
