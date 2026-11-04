@@ -56,8 +56,7 @@ function Results() {
         <Link to="/"><ArrowLeft className="h-4 w-4" /> Scan another</Link>
       </Button>
 
-      <div className="rounded-2xl border bg-card p-4">
-        <div className="mb-3 grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <Button
             variant="secondary"
             size="sm"
@@ -82,6 +81,7 @@ function Results() {
             <Link2 className="h-4 w-4" /> Move text to URL
           </Button>
         </div>
+      <div className="rounded-2xl border bg-card p-4">
         {link ? (
           <a
             href={link}
