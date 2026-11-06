@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 import { ArrowLeft, Copy, ExternalLink, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlyphShell } from "@/components/glyph-shell";
-import { isLink, normalizeLink } from "@/lib/qr-text";
+import { isLink, normalizeLink, toExternalHref } from "@/lib/qr-text";
 import { resolveResultContent, validateResultSearch } from "@/lib/result-content";
 
 declare module "@tanstack/react-router" {
@@ -47,7 +47,14 @@ function Results() {
       .catch(() => setImg(""));
   }, [text]);
 
-  const link = isLink(text) ? normalizeLink(text) : null;
+  const [env, setEnv] = useState({ android: false, standalone: false });
+  useEffect(() => {
+    setEnv({
+      android: /Android/i.test(navigator.userAgent),
+      standalone: window.matchMedia("(display-mode: standalone)").matches,
+    });
+  }, []);
+  const link = isLink(text) ? toExternalHref(normalizeLink(text), env) : null;
 
   return (
     <GlyphShell
@@ -61,8 +68,8 @@ function Results() {
       <div className="rounded-2xl border bg-card p-4">
         {link ? (
           <a
-            href={link}
-            target="_blank"
+            href={link.href}
+            target={link.intent ? undefined : "_blank"}
             rel="noopener noreferrer"
             className="flex items-start gap-2 break-all font-mono text-primary underline underline-offset-4"
           >

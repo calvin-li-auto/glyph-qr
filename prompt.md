@@ -25,3 +25,5 @@ don't really need a dedicated scan button
 the stop and "from image" buttons should be the same size
 
 bring back the scan button. But default to scanning
+
+The links open first in the "in-app browser". There should not be an in-app browser at all

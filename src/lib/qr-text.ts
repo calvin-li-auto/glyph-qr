@@ -8,3 +8,12 @@ export function normalizeLink(text: string): string {
   const t = text.trim();
   return /^https?:\/\//i.test(t) ? t : `https://${t}`;
 }
+
+export function toExternalHref(
+  url: string,
+  env: { android: boolean; standalone: boolean },
+): { href: string; intent: boolean } {
+  const m = /^(https?):\/\/(.+)$/i.exec(url);
+  if (!env.android || !env.standalone || !m) return { href: url, intent: false };
+  return { href: `intent://${m[2]}#Intent;scheme=${m[1].toLowerCase()};end`, intent: true };
+}
