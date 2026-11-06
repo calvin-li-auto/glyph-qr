@@ -15,5 +15,5 @@ export function toExternalHref(
 ): { href: string; intent: boolean } {
   const m = /^(https?):\/\/(.+)$/i.exec(url);
   if (!env.android || !env.standalone || !m) return { href: url, intent: false };
-  return { href: `intent://${m[2]}#Intent;scheme=${m[1].toLowerCase()};end`, intent: true };
+  return { href: `intent://${m[2]}#Intent;scheme=${(m[1] ?? "https").toLowerCase()};end`, intent: true };
 }
