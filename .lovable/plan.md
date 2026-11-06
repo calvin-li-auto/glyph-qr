@@ -1,23 +1,19 @@
-# Deploy Glyph to GitHub Pages
+# Open scanned links in the real browser, not the in-app browser
 
-GitHub Pages only serves static files, but the app is currently built to run on a server. The plan adds a static build alongside the current one and publishes it automatically from your GitHub repo. Lovable publishing keeps working as it does now.
+## Why it happens
+When Glyph is installed on Android, links that leave the app open in a Chrome "Custom Tab" overlay (the in-app browser). A normal web link can't turn this off, because Android decides it.
 
-## What you'll get
-- Every push to the main branch builds the app and publishes it to `https://calvin-li-auto.github.io/<repo-name>/`.
-- The scanner, results page, links you share with `?content=` and offline install all work there, just like on the Lovable address.
-- One manual step on GitHub: Repo Settings → Pages → Source: "GitHub Actions".
-
-## Steps
-1. **Static build mode:** add a build option that pre-renders the scanner and results pages to plain HTML and includes a fallback page, so opening a link directly or refreshing still loads the app.
-2. **Repo sub-path:** make the app work under `/<repo-name>/` instead of the site root. That means the start address, links between pages, icons, the install file (manifest) and offline caching scope. This only applies to the GitHub build.
-3. **Offline check:** make sure the offline worker caches the pre-rendered pages and starts from the right sub-path, so the app opens with no signal after the first visit.
-4. **Automatic publishing:** add a GitHub workflow that installs, builds the static version and publishes it to Pages on every push to main.
-5. **Verify:** build the static version in the sandbox, serve it under the sub-path and test it in a browser. Check that both pages load, the scanner works on an image, `?content=` opens and the app works offline after the first load.
+## Fix
+- On Android, when Glyph runs as an installed app, rewrite the tapped link into an Android "intent" link (`intent://host/path#Intent;scheme=https;end`). Android then hands it to your default browser app as a separate app.
+- Everywhere else (desktop, iPhone, a normal browser tab), keep today's behavior: open in a new tab.
+- The link text shown stays the original address. Only what happens on tap changes.
+- Only http/https links get rewritten. Other kinds like `mailto:` and `tel:` already open their own apps.
 
 ## Technical details
-- `vite.config.ts`: when `GH_PAGES=1`, set `base: "/<repo>/"` and enable TanStack Start SPA/prerender (`spa.enabled`, prerender `/` and `/results`), with the static output in `.output/public`. When it isn't set, the default Cloudflare build is unchanged.
-- Router `basepath` comes from `import.meta.env.BASE_URL`. Manifest `start_url`/`scope` and icon links become relative to base. Workbox `navigateFallback` points at the SPA shell, for the GH build only.
-- Copy `index.html` to `404.html` so deep links work on Pages.
-- `.github/workflows/pages.yml`: uses bun install, `GH_PAGES=1 bun run build`, then `actions/upload-pages-artifact` and `actions/deploy-pages`.
-- The repo name is read from `GITHUB_REPOSITORY` in the workflow, so nothing is hard-coded.
-- Record this as a rule in AGENTS.md: the static GitHub Pages build is env-gated, and the default build stays the Lovable/Cloudflare one.
+- Add `toExternalHref(url, { android, standalone })` in `src/lib/qr-text.ts`. It returns the intent URL only when both flags are true and the scheme is http(s).
+- In `src/routes/results.tsx`, detect after hydration: `/Android/i.test(navigator.userAgent)` and `matchMedia('(display-mode: standalone)').matches`. Use the returned href and drop `target="_blank"` in the intent case.
+- Unit tests in `src/test/qr-text.test.ts`: https becomes an intent URL on Android standalone, it's left alone off Android or when not installed, and mailto is never rewritten.
+- Add the prompt to prompt.md.
+
+## Limitation
+I can't test this on a real phone here. Once it's published, check it on your Android device.
