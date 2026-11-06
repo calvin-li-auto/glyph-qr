@@ -27,3 +27,5 @@ the stop and "from image" buttons should be the same size
 bring back the scan button. But default to scanning
 
 The links open first in the "in-app browser". There should not be an in-app browser at all
+
+also, I want the image to be at least 2in per side. Doesn't need to be exact, but right now it just gets the extra space that the buttons don't take up, and on a phone that is too small. push it below the buttons if needed

@@ -91,7 +91,8 @@ function Results() {
         className="w-full rounded-xl border bg-input/40 p-3 font-mono text-sm outline-none focus:ring-2 focus:ring-ring"
       />
 
-      <div id="qr_code_container" className="flex w-full items-start gap-3 sm:gap-4 [&>button]:w-20 [&>button]:shrink-0 sm:[&>button]:w-24">
+      <div className="@container w-full">
+      <div id="qr_code_container" className="flex w-full flex-wrap items-start gap-3 [&>button]:flex-1 @min-[23.5rem]:flex-nowrap @min-[23.5rem]:[&>button]:w-20 @min-[23.5rem]:[&>button]:flex-none @min-[23.5rem]:[&>button]:shrink-0 sm:gap-4 sm:[&>button]:w-24">
         <Button
           variant="outline"
           size="sm"
@@ -104,7 +105,7 @@ function Results() {
         >
           <Copy className="h-4 w-4 shrink-0" /> <span className="my-2">{copied ? "Copied" : "Copy text"}</span>
         </Button>
-        <div className="min-w-0 flex-1 bg-paper p-3 shadow-glow">
+        <div className="order-last min-w-48 basis-full bg-paper p-3 shadow-glow @min-[23.5rem]:order-none @min-[23.5rem]:basis-auto @min-[23.5rem]:flex-1">
           {img ? (
             <img src={img} alt="QR code" className="aspect-square w-full" />
           ) : (
@@ -122,6 +123,7 @@ function Results() {
         >
           <Link2 className="h-4 w-4 shrink-0" /> Move text to URL
         </Button>
+      </div>
       </div>
     </section>
     </GlyphShell>
