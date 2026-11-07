@@ -14,7 +14,7 @@ import { toExternalHref } from "@/lib/qr-text";
 describe("toExternalHref", () => {
   it("uses an intent link on installed Android", () =>
     expect(toExternalHref("https://a.com/x?y=1", { android: true, standalone: true }).href).toBe(
-      "intent://a.com/x?y=1#Intent;scheme=https;end",
+      "intent://a.com/x?y=1#Intent;scheme=https;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url=https%3A%2F%2Fa.com%2Fx%3Fy%3D1;end",
     ));
   it("keeps the link when not installed", () =>
     expect(toExternalHref("https://a.com", { android: true, standalone: false }).href).toBe("https://a.com"));
