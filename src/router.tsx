@@ -9,6 +9,8 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
+    // Static hosts serve results/index.html at /results/; don't redirect it away.
+    trailingSlash: "preserve",
     defaultPreloadStaleTime: 0,
   });
 
