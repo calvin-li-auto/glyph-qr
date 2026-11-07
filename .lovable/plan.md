@@ -14,3 +14,4 @@ Yes. Everything that matters (camera, QR reading, QR making, offline caching) al
 - Add both HTML files to the service worker's precache list so the first offline open doesn't depend on an earlier visit to each page.
 - Run existing tests; check both prebuilt pages load and that a scan still reaches the results page.
 - Record the static-build rule in AGENTS.md.
+- Optional GitHub Pages support: make the site's base folder configurable (e.g. `/<repo-name>/`) so links, icons, manifest and service worker resolve under a project subpath.
