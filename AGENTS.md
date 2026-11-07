@@ -15,3 +15,5 @@
 - Start camera access on scanner mount and invalidate pending requests when stopped or unmounted so navigation never leaves a camera stream running.
 - Transfer decoded QR text through router history state by default; results accept optional validated URL content with precedence over history state, and only an explicit user action publishes edited text into the URL, keeping scans private by default.
 - Write prompts into the prompt.md file. Just use whatever I typed in, with a blank line separating prompts. Clear the prompt.md file contents after every git commit
+
+- Scanner and results pages are prerendered to static HTML (vite.config pages + router trailingSlash "preserve", since the prerenderer requests /results/); keep them free of per-visitor server data.

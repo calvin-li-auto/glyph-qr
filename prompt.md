@@ -31,3 +31,7 @@ The links open first in the "in-app browser". There should not be an in-app brow
 also, I want the image to be at least 2in per side. Doesn't need to be exact, but right now it just gets the extra space that the buttons don't take up, and on a phone that is too small. push it below the buttons if needed
 
 Now the link doesn't work when installed as a PWA and trying to open a general web app (one that would open on the default browser)
+
+Since this works offline, it should be possible to make it a static website with <script>s to handle the camera and qr code stuff right?
+
+Does gh pages support having scripts as separate files? How about having multiple html pages, like how content is currently a separate page?
