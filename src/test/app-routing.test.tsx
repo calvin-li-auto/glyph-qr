@@ -27,8 +27,8 @@ describe("App routing", () => {
       trailingSlash: "preserve",
       context: { queryClient: new QueryClient() },
     });
-    const scanner = router.parseLocation({ pathname: "/glyph-qr/", href: "/glyph-qr/", search: "", hash: "", state: {} });
-    const results = router.parseLocation({ pathname: "/glyph-qr/results/", href: "/glyph-qr/results/", search: "", hash: "", state: {} });
+    const scanner = router.parseLocation({ pathname: "/glyph-qr/", href: "/glyph-qr/", search: "", hash: "", state: { __TSR_index: 0 } });
+    const results = router.parseLocation({ pathname: "/glyph-qr/results/", href: "/glyph-qr/results/", search: "", hash: "", state: { __TSR_index: 1 } });
     expect(router.matchRoutes(scanner.pathname).at(-1)?.routeId).toBe("/");
     expect(router.matchRoutes(results.pathname).at(-1)?.routeId).toBe("/results");
     expect(router.buildLocation({ to: "/" }).publicHref).toBe("/glyph-qr/");

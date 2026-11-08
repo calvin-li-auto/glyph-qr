@@ -8,7 +8,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { VitePWA } from "vite-plugin-pwa";
 
 // Opt in only for GitHub Pages; Lovable and other root hosts keep their addresses.
-const base = process.env.GITHUB_PAGES === "true" ? "/glyph-qr/" : "/";
+const base = process.env['GITHUB_PAGES'] === "true" ? "/glyph-qr/" : "/";
 
 export default defineConfig({
   nitro: { output: { dir: "dist", serverDir: "dist/server", publicDir: "dist/client" } },
@@ -38,7 +38,7 @@ export default defineConfig({
           runtimeCaching: [
             {
               urlPattern: ({ request, url }) =>
-                request.mode === "navigate" && url.pathname.startsWith(base) && !url.pathname.startsWith(`${base}~oauth`),
+                request.mode === "navigate" && url.origin === self.location.origin && url.pathname.startsWith(new URL(self.registration.scope).pathname) && !url.pathname.startsWith(`${new URL(self.registration.scope).pathname}~oauth`),
               handler: "NetworkFirst",
               options: {
                 cacheName: "pages",
@@ -48,7 +48,7 @@ export default defineConfig({
             },
             {
               urlPattern: ({ url, sameOrigin }) =>
-                sameOrigin && url.pathname.startsWith(`${base}assets/`),
+                sameOrigin && url.pathname.startsWith(`${new URL(self.registration.scope).pathname}assets/`),
               handler: "CacheFirst",
               options: { cacheName: "assets", expiration: { maxEntries: 200 } },
             },
