@@ -38,7 +38,7 @@ export default defineConfig({
           runtimeCaching: [
             {
               urlPattern: ({ request, url }) =>
-                request.mode === "navigate" && url.origin === self.location.origin && url.pathname.startsWith(new URL(self.registration.scope).pathname) && !url.pathname.startsWith(`${new URL(self.registration.scope).pathname}~oauth`),
+                request.mode === "navigate" && url.origin === self.location.origin && url.pathname.startsWith(new URL("./", self.location.href).pathname) && !url.pathname.startsWith(`${new URL("./", self.location.href).pathname}~oauth`),
               handler: "NetworkFirst",
               options: {
                 cacheName: "pages",
@@ -48,7 +48,7 @@ export default defineConfig({
             },
             {
               urlPattern: ({ url, sameOrigin }) =>
-                sameOrigin && url.pathname.startsWith(`${new URL(self.registration.scope).pathname}assets/`),
+                sameOrigin && url.pathname.startsWith(`${new URL("./", self.location.href).pathname}assets/`),
               handler: "CacheFirst",
               options: { cacheName: "assets", expiration: { maxEntries: 200 } },
             },
