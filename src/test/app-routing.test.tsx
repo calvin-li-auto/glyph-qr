@@ -27,10 +27,12 @@ describe("App routing", () => {
       trailingSlash: "preserve",
       context: { queryClient: new QueryClient() },
     });
-    expect(router.matchRoutes("/glyph-qr/").at(-1)?.routeId).toBe("/");
-    expect(router.matchRoutes("/glyph-qr/results/").at(-1)?.routeId).toBe("/results");
-    expect(router.buildLocation({ to: "/" }).href).toBe("/glyph-qr/");
-    expect(router.buildLocation({ to: "/results", search: { content: "你好" } }).href)
+    const scanner = router.parseLocation({ pathname: "/glyph-qr/", href: "/glyph-qr/", search: "", hash: "", state: {} });
+    const results = router.parseLocation({ pathname: "/glyph-qr/results/", href: "/glyph-qr/results/", search: "", hash: "", state: {} });
+    expect(router.matchRoutes(scanner.pathname).at(-1)?.routeId).toBe("/");
+    expect(router.matchRoutes(results.pathname).at(-1)?.routeId).toBe("/results");
+    expect(router.buildLocation({ to: "/" }).publicHref).toBe("/glyph-qr/");
+    expect(router.buildLocation({ to: "/results", search: { content: "你好" } }).publicHref)
       .toBe("/glyph-qr/results?content=%E4%BD%A0%E5%A5%BD");
   });
 });
