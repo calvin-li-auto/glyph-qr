@@ -19,4 +19,20 @@ describe("App routing", () => {
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
     expect(router.matchRoutes("/results").at(-1)?.routeId).toBe("/results");
   });
+
+  it("matches scanner and results under the glyph-qr GitHub Pages folder", () => {
+    const router = createRouter({
+      routeTree,
+      basepath: "/glyph-qr/",
+      trailingSlash: "preserve",
+      context: { queryClient: new QueryClient() },
+    });
+    const scanner = router.parseLocation({ pathname: "/glyph-qr/", href: "/glyph-qr/", search: "", hash: "", state: { __TSR_index: 0 } });
+    const results = router.parseLocation({ pathname: "/glyph-qr/results/", href: "/glyph-qr/results/", search: "", hash: "", state: { __TSR_index: 1 } });
+    expect(router.matchRoutes(scanner.pathname).at(-1)?.routeId).toBe("/");
+    expect(router.matchRoutes(results.pathname).at(-1)?.routeId).toBe("/results");
+    expect(router.buildLocation({ to: "/" }).publicHref).toBe("/glyph-qr/");
+    expect(router.buildLocation({ to: "/results", search: { content: "你好" } }).publicHref)
+      .toBe("/glyph-qr/results?content=%E4%BD%A0%E5%A5%BD");
+  });
 });

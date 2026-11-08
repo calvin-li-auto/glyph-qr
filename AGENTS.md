@@ -17,3 +17,4 @@
 - Write prompts into the prompt.md file. Just use whatever I typed in, with a blank line separating prompts. Clear the prompt.md file contents after every git commit
 
 - Scanner and results pages are prerendered to static HTML (vite.config pages + router trailingSlash "preserve", since the prerenderer requests /results/); keep them free of per-visitor server data.
+- GitHub Pages builds opt into a project base through GITHUB_PAGES; keep Vite, router, prerender paths, public asset links and service-worker scope aligned, and deploy only dist/client so root-hosted Lovable builds remain unchanged.

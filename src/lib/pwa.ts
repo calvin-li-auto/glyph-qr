@@ -22,7 +22,7 @@ async function unregisterAppSW() {
   const regs = await navigator.serviceWorker.getRegistrations();
   await Promise.all(
     regs
-      .filter((r) => (r.active || r.waiting || r.installing)?.scriptURL.endsWith("/sw.js"))
+      .filter((r) => (r.active || r.waiting || r.installing)?.scriptURL === new URL(`${import.meta.env.BASE_URL}sw.js`, window.location.origin).href)
       .map((r) => r.unregister()),
   );
 }

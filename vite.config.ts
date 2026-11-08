@@ -7,22 +7,29 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { VitePWA } from "vite-plugin-pwa";
 
+// Opt in only for GitHub Pages; Lovable and other root hosts keep their addresses.
+const base = process.env['GITHUB_PAGES'] === "true" ? "/glyph-qr/" : "/";
+
 export default defineConfig({
+  nitro: { output: { dir: "dist", serverDir: "dist/server", publicDir: "dist/client" } },
   tanstackStart: {
+    router: { basepath: base },
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
     // Both pages render identically for every visitor, so build them as static HTML.
-    pages: [{ path: "/" }, { path: "/results" }],
+    pages: [{ path: base }, { path: `${base}results` }],
     prerender: { enabled: true, autoStaticPathsDiscovery: false },
   },
   vite: {
+    base,
     plugins: [
       VitePWA({
         registerType: "autoUpdate",
         injectRegister: null,
         devOptions: { enabled: false },
         filename: "sw.js",
+        scope: base,
         manifest: false,
         workbox: {
           globPatterns: ["**/*.{js,css,png,svg,ico,webmanifest,woff2}"],
@@ -31,7 +38,7 @@ export default defineConfig({
           runtimeCaching: [
             {
               urlPattern: ({ request, url }) =>
-                request.mode === "navigate" && !url.pathname.startsWith("/~oauth"),
+                request.mode === "navigate" && url.origin === self.location.origin && url.pathname.startsWith(new URL("./", self.location.href).pathname) && !url.pathname.startsWith(`${new URL("./", self.location.href).pathname}~oauth`),
               handler: "NetworkFirst",
               options: {
                 cacheName: "pages",
@@ -41,7 +48,7 @@ export default defineConfig({
             },
             {
               urlPattern: ({ url, sameOrigin }) =>
-                sameOrigin && url.pathname.startsWith("/assets/"),
+                sameOrigin && url.pathname.startsWith(`${new URL("./", self.location.href).pathname}assets/`),
               handler: "CacheFirst",
               options: { cacheName: "assets", expiration: { maxEntries: 200 } },
             },
