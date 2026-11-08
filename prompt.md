@@ -35,3 +35,5 @@ Now the link doesn't work when installed as a PWA and trying to open a general w
 Since this works offline, it should be possible to make it a static website with <script>s to handle the camera and qr code stuff right?
 
 Does gh pages support having scripts as separate files? How about having multiple html pages, like how content is currently a separate page?
+
+The gh project name is glyph-qr

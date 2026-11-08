@@ -5,4 +5,5 @@
 - [x] Verify Unicode link round-trips, reloads, editing, and private navigation (history fallback covered by tests).
 - [x] Move "Scan another" into the header and center the Glyph logo/title.
 - [x] Build scanner and results pages as static HTML files.
-- [ ] Optional: configurable base folder for GitHub Pages project sites (waiting on user).
+- [ ] Configure /glyph-qr/ addresses, installed-app files, and offline caching for GitHub Pages while retaining root hosting.
+- [ ] Add GitHub Pages deployment instructions and verify project-folder navigation.
